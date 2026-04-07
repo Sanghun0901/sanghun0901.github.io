@@ -7,814 +7,215 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0a0a0f;
-    --bg2: #111118;
-    --bg3: #1a1a24;
-    --border: rgba(255,255,255,0.07);
-    --border-bright: rgba(255,255,255,0.15);
-    --accent: #c8a96e;
-    --accent2: #e8c98e;
-    --text: #f0ede8;
-    --text2: #a09890;
-    --text3: #6a6460;
-    --green: #4ade80;
-    --red: #f87171;
-    --amber: #fbbf24;
-    --teal: #2dd4bf;
-    --card-bg: rgba(255,255,255,0.03);
-    --card-hover: rgba(255,255,255,0.05);
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Noto Sans KR', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  /* grain overlay */
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none; z-index: 0; opacity: 0.6;
-  }
-
-  .wrap { position: relative; z-index: 1; max-width: 780px; margin: 0 auto; padding: 0 24px 80px; }
-
-  /* HEADER */
-  header {
-    padding: 48px 0 40px;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 40px;
-  }
-  .header-tag {
-    display: inline-block;
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    color: var(--accent);
-    text-transform: uppercase;
-    border: 1px solid rgba(200,169,110,0.3);
-    padding: 4px 12px;
-    border-radius: 2px;
-    margin-bottom: 16px;
-    font-family: 'Noto Sans KR', sans-serif;
-    font-weight: 500;
-  }
-  h1 {
-    font-family: 'Noto Serif KR', serif;
-    font-size: clamp(28px, 5vw, 42px);
-    font-weight: 700;
-    line-height: 1.25;
-    color: var(--text);
-    margin-bottom: 12px;
-  }
-  h1 em { color: var(--accent); font-style: normal; }
-  .header-sub {
-    font-size: 14px;
-    color: var(--text2);
-    line-height: 1.7;
-    max-width: 520px;
-  }
-
-  /* SECTION */
-  .section { margin-bottom: 32px; }
-  .section-title {
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text3);
-    margin-bottom: 14px;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .section-title::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  /* CHIPS */
-  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
-  .chip {
-    padding: 7px 14px;
-    border: 1px solid var(--border-bright);
-    border-radius: 2px;
-    font-size: 13px;
-    color: var(--text2);
-    cursor: pointer;
-    background: transparent;
-    transition: all 0.15s;
-    font-family: 'Noto Sans KR', sans-serif;
-  }
-  .chip:hover { border-color: var(--accent); color: var(--accent); }
-  .chip.on {
-    background: rgba(200,169,110,0.12);
-    border-color: var(--accent);
-    color: var(--accent2);
-  }
-
-  /* INPUT ROW */
-  .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  @media (max-width: 480px) { .input-row { grid-template-columns: 1fr; } }
-
-  .field label {
-    display: block;
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text3);
-    margin-bottom: 8px;
-    font-weight: 500;
-  }
-  .field select, .field input, .field textarea {
-    width: 100%;
-    background: var(--bg3);
-    border: 1px solid var(--border-bright);
-    color: var(--text);
-    font-family: 'Noto Sans KR', sans-serif;
-    font-size: 13px;
-    padding: 10px 14px;
-    border-radius: 2px;
-    outline: none;
-    transition: border-color 0.15s;
-    -webkit-appearance: none;
-  }
-  .field select:focus, .field input:focus, .field textarea:focus {
-    border-color: var(--accent);
-  }
-  .field textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
-
-  /* SLIDER */
-  .slider-row { display: flex; align-items: center; gap: 14px; }
-  .slider-row input[type=range] {
-    flex: 1; -webkit-appearance: none; height: 2px;
-    background: var(--border-bright); border-radius: 1px; outline: none; cursor: pointer;
-  }
-  .slider-row input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance: none; width: 16px; height: 16px;
-    border-radius: 50%; background: var(--accent); cursor: pointer;
-    border: 2px solid var(--bg);
-  }
-  .slider-val {
-    font-size: 13px; font-weight: 500; color: var(--accent2);
-    min-width: 68px; text-align: right;
-  }
-
-  /* ANALYZE BUTTON */
-  .btn-analyze {
-    width: 100%;
-    padding: 16px;
-    background: var(--accent);
-    color: #0a0a0f;
-    font-family: 'Noto Serif KR', serif;
-    font-size: 16px;
-    font-weight: 700;
-    border: none;
-    border-radius: 2px;
-    cursor: pointer;
-    letter-spacing: 0.04em;
-    transition: all 0.2s;
-    margin-top: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-  }
-  .btn-analyze:hover { background: var(--accent2); transform: translateY(-1px); }
-  .btn-analyze:active { transform: translateY(0); }
-  .btn-analyze:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-  /* DIVIDER */
-  .divider {
-    height: 1px; background: var(--border);
-    margin: 40px 0; position: relative;
-  }
-  .divider::after {
-    content: '분석 결과';
-    position: absolute; top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    background: var(--bg);
-    padding: 0 16px;
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text3);
-  }
-
-  /* RESULT AREA */
-  #result-area { display: none; }
-  #result-area.visible { display: block; animation: fadeIn 0.5s ease; }
-
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-
-  /* LOADING */
-  .loading {
-    display: flex; flex-direction: column; align-items: center;
-    gap: 20px; padding: 60px 0; text-align: center;
-  }
-  .spinner {
-    width: 36px; height: 36px;
-    border: 2px solid var(--border-bright);
-    border-top-color: var(--accent);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .loading-text { font-size: 14px; color: var(--text2); }
-  .loading-step { font-size: 12px; color: var(--text3); margin-top: 4px; }
-
-  /* RESULT CONTENT */
-  .result-content {
-    font-size: 14px;
-    line-height: 1.85;
-    color: var(--text);
-  }
-
-  /* Markdown-style rendering */
-  .result-content h2 {
-    font-family: 'Noto Serif KR', serif;
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--accent2);
-    margin: 32px 0 14px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--border);
-  }
-  .result-content h2:first-child { margin-top: 0; }
-  .result-content h3 {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--text);
-    margin: 20px 0 8px;
-  }
-  .result-content p { margin-bottom: 12px; color: var(--text2); }
-  .result-content strong { color: var(--text); font-weight: 700; }
-
-  .result-content ul, .result-content ol {
-    padding-left: 20px; margin-bottom: 14px;
-  }
-  .result-content li { margin-bottom: 6px; color: var(--text2); }
-  .result-content li strong { color: var(--accent2); }
-
-  /* Score cards */
-  .score-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 12px;
-    margin: 16px 0 24px;
-  }
-  .score-card {
-    background: var(--bg3);
-    border: 1px solid var(--border-bright);
-    border-radius: 4px;
-    padding: 16px;
-    position: relative;
-    overflow: hidden;
-  }
-  .score-card.rank1 { border-color: rgba(200,169,110,0.5); }
-  .score-card .rank-badge {
-    font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--accent); font-weight: 700; margin-bottom: 6px;
-  }
-  .score-card .biz-name {
-    font-family: 'Noto Serif KR', serif;
-    font-size: 16px; font-weight: 700; color: var(--text);
-    margin-bottom: 4px;
-  }
-  .score-card .biz-sub { font-size: 12px; color: var(--text3); margin-bottom: 12px; }
-  .score-card .total-score {
-    font-size: 28px; font-weight: 700; color: var(--accent2);
-    font-family: 'Noto Serif KR', serif;
-    margin-bottom: 12px;
-  }
-  .score-card .total-score span { font-size: 14px; color: var(--text3); }
-  .bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
-  .bar-label { font-size: 11px; color: var(--text3); width: 48px; }
-  .bar-track { flex: 1; height: 3px; background: var(--border-bright); border-radius: 2px; }
-  .bar-fill-el { height: 3px; border-radius: 2px; background: var(--accent); transition: width 1s ease; }
-  .bar-num { font-size: 11px; color: var(--text2); width: 24px; text-align: right; }
-
-  .tag-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
-  .tag {
-    font-size: 10px; padding: 2px 8px; border-radius: 2px;
-    font-weight: 500;
-  }
-  .tag.g { background: rgba(74,222,128,0.1); color: #4ade80; border: 1px solid rgba(74,222,128,0.2); }
-  .tag.r { background: rgba(248,113,113,0.1); color: #f87171; border: 1px solid rgba(248,113,113,0.2); }
-  .tag.a { background: rgba(251,191,36,0.1); color: #fbbf24; border: 1px solid rgba(251,191,36,0.2); }
-
-  .rev-row {
-    display: flex; gap: 8px; margin-top: 12px;
-  }
-  .rev-cell {
-    flex: 1; background: rgba(255,255,255,0.03);
-    padding: 8px; border-radius: 3px; text-align: center;
-  }
-  .rev-cell .rv-label { font-size: 10px; color: var(--text3); margin-bottom: 3px; }
-  .rev-cell .rv-val { font-size: 12px; font-weight: 700; color: var(--accent2); }
-
-  /* risk / tip blocks */
-  .block {
-    border-left: 2px solid;
-    padding: 14px 16px;
-    margin-bottom: 12px;
-    background: var(--card-bg);
-    border-radius: 0 3px 3px 0;
-  }
-  .block.risk { border-color: var(--red); }
-  .block.tip { border-color: var(--green); }
-  .block .block-title {
-    font-size: 13px; font-weight: 700; color: var(--text);
-    margin-bottom: 6px;
-  }
-  .block .block-body { font-size: 13px; color: var(--text2); line-height: 1.7; }
-
-  /* RAW TEXT STREAM */
-  .stream-text {
-    font-size: 14px; line-height: 1.85; color: var(--text2);
-    white-space: pre-wrap; font-family: 'Noto Sans KR', sans-serif;
-  }
-
-  /* ERROR */
-  .error-box {
-    background: rgba(248,113,113,0.08);
-    border: 1px solid rgba(248,113,113,0.3);
-    border-radius: 4px;
-    padding: 16px 20px;
-    font-size: 13px;
-    color: #f87171;
-    line-height: 1.6;
-  }
-
-  /* FOOTER */
-  footer {
-    text-align: center;
-    padding: 40px 0 20px;
-    font-size: 12px;
-    color: var(--text3);
-    border-top: 1px solid var(--border);
-    margin-top: 60px;
-  }
-
-  /* RESET BTN */
-  .btn-reset {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 8px 16px;
-    border: 1px solid var(--border-bright);
-    border-radius: 2px;
-    background: transparent;
-    color: var(--text2);
-    font-size: 12px;
-    cursor: pointer;
-    font-family: 'Noto Sans KR', sans-serif;
-    margin-top: 24px;
-    transition: all 0.15s;
-  }
-  .btn-reset:hover { border-color: var(--accent); color: var(--accent); }
-
-  /* steps indicator */
-  .steps {
-    display: flex; gap: 0;
-    margin-bottom: 36px;
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    overflow: hidden;
-  }
-  .step-item {
-    flex: 1; text-align: center; padding: 10px 8px;
-    font-size: 11px; letter-spacing: 0.05em; color: var(--text3);
-    border-right: 1px solid var(--border);
-    cursor: pointer;
-    transition: all 0.15s;
-    font-weight: 500;
-  }
-  .step-item:last-child { border-right: none; }
-  .step-item.active { background: rgba(200,169,110,0.1); color: var(--accent); }
-  .step-item span {
-    display: block; font-size: 16px; margin-bottom: 2px;
-  }
-
-  .panel { display: none; }
-  .panel.active { display: block; animation: fadeIn 0.3s ease; }
-
-  .summary-grid {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 10px; margin-bottom: 20px;
-  }
-  .sum-cell {
-    background: var(--bg3); border: 1px solid var(--border);
-    border-radius: 3px; padding: 10px 12px;
-  }
-  .sum-cell .sc-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
-  .sum-cell .sc-val { font-size: 13px; font-weight: 500; color: var(--accent2); }
+:root{--bg:#0a0a0f;--bg3:#1a1a24;--border:rgba(255,255,255,0.07);--border-bright:rgba(255,255,255,0.15);--accent:#c8a96e;--accent2:#e8c98e;--text:#f0ede8;--text2:#a09890;--text3:#6a6460;--green:#4ade80;--red:#f87171;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;min-height:100vh;overflow-x:hidden;}
+.wrap{position:relative;z-index:1;max-width:780px;margin:0 auto;padding:0 24px 80px;}
+header{padding:48px 0 40px;border-bottom:1px solid var(--border);margin-bottom:40px;}
+.header-tag{display:inline-block;font-size:11px;letter-spacing:.12em;color:var(--accent);text-transform:uppercase;border:1px solid rgba(200,169,110,.3);padding:4px 12px;border-radius:2px;margin-bottom:16px;font-weight:500;}
+h1{font-family:'Noto Serif KR',serif;font-size:clamp(28px,5vw,42px);font-weight:700;line-height:1.25;margin-bottom:12px;}
+h1 em{color:var(--accent);font-style:normal;}
+.header-sub{font-size:14px;color:var(--text2);line-height:1.7;max-width:520px;}
+.section{margin-bottom:32px;}
+.section-title{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:14px;font-weight:500;display:flex;align-items:center;gap:10px;}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.chips{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{padding:7px 14px;border:1px solid var(--border-bright);border-radius:2px;font-size:13px;color:var(--text2);cursor:pointer;background:transparent;transition:all .15s;font-family:'Noto Sans KR',sans-serif;}
+.chip:hover{border-color:var(--accent);color:var(--accent);}
+.chip.on{background:rgba(200,169,110,.12);border-color:var(--accent);color:var(--accent2);}
+.input-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:480px){.input-row{grid-template-columns:1fr;}}
+.field label{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:8px;font-weight:500;}
+.field select,.field input,.field textarea{width:100%;background:var(--bg3);border:1px solid var(--border-bright);color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:13px;padding:10px 14px;border-radius:2px;outline:none;-webkit-appearance:none;}
+.field select:focus,.field input:focus,.field textarea:focus{border-color:var(--accent);}
+.field textarea{resize:vertical;min-height:80px;line-height:1.6;}
+.slider-row{display:flex;align-items:center;gap:14px;}
+.slider-row input[type=range]{flex:1;-webkit-appearance:none;height:2px;background:var(--border-bright);border-radius:1px;outline:none;cursor:pointer;}
+.slider-row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid var(--bg);}
+.slider-val{font-size:13px;font-weight:500;color:var(--accent2);min-width:68px;text-align:right;}
+.btn{width:100%;padding:16px;font-family:'Noto Serif KR',serif;font-size:16px;font-weight:700;border:none;border-radius:2px;cursor:pointer;letter-spacing:.04em;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px;}
+.btn-gold{background:var(--accent);color:#0a0a0f;}
+.btn-gold:hover{background:var(--accent2);transform:translateY(-1px);}
+.btn-gold:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.btn-ghost{background:var(--bg3);color:var(--text2);border:1px solid var(--border-bright);font-family:'Noto Sans KR',sans-serif;font-size:14px;font-weight:400;}
+.btn-outline-gold{background:var(--bg3);color:var(--accent);border:1px solid rgba(200,169,110,.4);font-family:'Noto Sans KR',sans-serif;font-size:14px;font-weight:500;}
+.divider{height:1px;background:var(--border);margin:40px 0;position:relative;}
+.divider::after{content:'분석 결과';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg);padding:0 16px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);}
+#result-area{display:none;}
+#result-area.visible{display:block;animation:fadeIn .5s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.loading{display:flex;flex-direction:column;align-items:center;gap:20px;padding:60px 0;text-align:center;}
+.spinner{width:36px;height:36px;border:2px solid var(--border-bright);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-size:14px;color:var(--text2);}
+.loading-step{font-size:12px;color:var(--text3);margin-top:4px;}
+.result-content{font-size:14px;line-height:1.85;color:var(--text);}
+.result-content h2{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:700;color:var(--accent2);margin:32px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+.result-content h2:first-child{margin-top:0;}
+.result-content h3{font-size:15px;font-weight:700;color:var(--text);margin:20px 0 8px;}
+.result-content p{margin-bottom:12px;color:var(--text2);}
+.result-content strong{color:var(--text);font-weight:700;}
+.result-content ul,.result-content ol{padding-left:20px;margin-bottom:14px;}
+.result-content li{margin-bottom:6px;color:var(--text2);}
+.result-content li strong{color:var(--accent2);}
+.error-box{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.3);border-radius:4px;padding:16px 20px;font-size:13px;color:#f87171;line-height:1.6;}
+.btn-reset{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:1px solid var(--border-bright);border-radius:2px;background:transparent;color:var(--text2);font-size:12px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;margin-top:24px;}
+.btn-reset:hover{border-color:var(--accent);color:var(--accent);}
+.steps{display:flex;margin-bottom:36px;border:1px solid var(--border);border-radius:3px;overflow:hidden;}
+.step-item{flex:1;text-align:center;padding:10px 8px;font-size:11px;letter-spacing:.05em;color:var(--text3);border-right:1px solid var(--border);cursor:pointer;font-weight:500;}
+.step-item:last-child{border-right:none;}
+.step-item.active{background:rgba(200,169,110,.1);color:var(--accent);}
+.step-item span{display:block;font-size:16px;margin-bottom:2px;}
+.panel{display:none;}
+.panel.active{display:block;animation:fadeIn .3s ease;}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.sum-cell{background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:10px 12px;}
+.sum-cell .sc-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+.sum-cell .sc-val{font-size:13px;font-weight:500;color:var(--accent2);}
+.apikey-box{background:rgba(200,169,110,.06);border:1px solid rgba(200,169,110,.25);border-radius:4px;padding:16px 20px;margin-bottom:28px;}
+.apikey-box .ak-title{font-size:13px;font-weight:700;color:var(--accent2);margin-bottom:6px;}
+.apikey-box .ak-desc{font-size:12px;color:var(--text3);margin-bottom:12px;line-height:1.6;}
+.apikey-box .ak-desc a{color:var(--accent);text-decoration:none;}
+.apikey-row{display:flex;gap:8px;}
+.apikey-row input{flex:1;background:var(--bg3);border:1px solid var(--border-bright);color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:13px;padding:9px 14px;border-radius:2px;outline:none;}
+.apikey-row input:focus{border-color:var(--accent);}
+.apikey-row button{padding:9px 16px;background:rgba(200,169,110,.15);border:1px solid rgba(200,169,110,.4);color:var(--accent2);font-size:12px;font-weight:700;border-radius:2px;cursor:pointer;white-space:nowrap;}
+.ak-status{font-size:11px;margin-top:6px;}
+.ak-status.ok{color:var(--green);}
+.ak-status.err{color:var(--red);}
+footer{text-align:center;padding:40px 0 20px;font-size:12px;color:var(--text3);border-top:1px solid var(--border);margin-top:60px;}
 </style>
 </head>
 <body>
 <div class="wrap">
-
-  <header>
-    <div class="header-tag">AI 창업 분석 도구</div>
-    <h1>요식업 창업,<br><em>데이터로 결정하세요</em></h1>
-    <p class="header-sub">업종·상권·예산 조건을 입력하면 AI가 트렌드·경쟁도·수익성을 종합 분석해 최적 업종을 추천해 드립니다.</p>
-  </header>
-
-  <!-- STEP TABS -->
-  <div class="steps">
-    <div class="step-item active" id="tab-0" onclick="goStep(0)"><span>①</span>업종·예산</div>
-    <div class="step-item" id="tab-1" onclick="goStep(1)"><span>②</span>상권·운영</div>
-    <div class="step-item" id="tab-2" onclick="goStep(2)"><span>③</span>분석 시작</div>
+<header>
+  <div class="header-tag">AI 창업 분석 도구</div>
+  <h1>요식업 창업,<br><em>데이터로 결정하세요</em></h1>
+  <p class="header-sub">업종·상권·예산 조건을 입력하면 AI가 트렌드·경쟁도·수익성을 종합 분석해 최적 업종을 추천해 드립니다.</p>
+</header>
+<div class="apikey-box">
+  <div class="ak-title">Anthropic API 키 입력</div>
+  <div class="ak-desc">분석 기능 사용을 위해 본인의 API 키가 필요합니다.<br><a href="https://console.anthropic.com/keys" target="_blank">console.anthropic.com/keys</a>에서 무료로 발급받을 수 있어요. 키는 이 브라우저에만 저장되며 외부로 전송되지 않습니다.</div>
+  <div class="apikey-row">
+    <input type="password" id="api-key" placeholder="sk-ant-..." autocomplete="off">
+    <button onclick="saveKey()">저장</button>
   </div>
-
-  <!-- PANEL 0 -->
-  <div class="panel active" id="panel-0">
-    <div class="section">
-      <div class="section-title">관심 업종 <small style="font-size:10px;text-transform:none;letter-spacing:0;color:var(--text3)">(복수 선택)</small></div>
-      <div class="chips" id="genre-chips">
-        <button class="chip" data-v="한식">한식</button>
-        <button class="chip" data-v="중식">중식</button>
-        <button class="chip" data-v="일식">일식</button>
-        <button class="chip" data-v="양식">양식</button>
-        <button class="chip" data-v="카페·디저트">카페·디저트</button>
-        <button class="chip" data-v="치킨·튀김">치킨·튀김</button>
-        <button class="chip" data-v="분식">분식</button>
-        <button class="chip" data-v="고기구이">고기구이</button>
-        <button class="chip" data-v="해산물">해산물</button>
-        <button class="chip" data-v="샐러드·건강식">샐러드·건강식</button>
-        <button class="chip" data-v="술집·주점">술집·주점</button>
-        <button class="chip" data-v="테이크아웃 전문">테이크아웃</button>
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="section-title">창업 예산</div>
-      <div class="slider-row">
-        <input type="range" id="budget" min="1" max="10" step="1" value="5">
-        <span class="slider-val" id="budget-out">5천만원</span>
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="section-title">창업자 경험</div>
-      <div class="chips" id="exp-chips">
-        <button class="chip" data-v="업계 경험 없음">경험 없음</button>
-        <button class="chip" data-v="아르바이트·파트타임">파트타임 경험</button>
-        <button class="chip" data-v="직접 운영 경험 있음">직접 운영 경험</button>
-      </div>
-    </div>
-
-    <button class="btn-analyze" onclick="goStep(1)" style="margin-top:16px;background:var(--bg3);color:var(--accent);border:1px solid rgba(200,169,110,0.4);font-family:'Noto Sans KR',sans-serif;font-size:14px;font-weight:500;">
-      다음 단계 →
-    </button>
-  </div>
-
-  <!-- PANEL 1 -->
-  <div class="panel" id="panel-1">
-    <div class="section">
-      <div class="section-title">희망 상권 유형 <small style="font-size:10px;text-transform:none;letter-spacing:0;color:var(--text3)">(복수 선택)</small></div>
-      <div class="chips" id="area-chips">
-        <button class="chip" data-v="역세권">역세권</button>
-        <button class="chip" data-v="대학가">대학가</button>
-        <button class="chip" data-v="오피스 밀집">오피스 밀집</button>
-        <button class="chip" data-v="주택가·골목">주택가·골목</button>
-        <button class="chip" data-v="쇼핑몰·복합시설">쇼핑몰</button>
-        <button class="chip" data-v="관광지">관광지</button>
-        <button class="chip" data-v="학원가">학원가</button>
-        <button class="chip" data-v="병원·의료 밀집">병원·의료 밀집</button>
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="input-row">
-        <div class="field">
-          <label>목표 고객층</label>
-          <select id="target">
-            <option value="">선택하세요</option>
-            <option value="10~20대 학생">10~20대 학생</option>
-            <option value="직장인 (30~40대)">직장인 (30~40대)</option>
-            <option value="가족 단위">가족 단위</option>
-            <option value="시니어 (50대+)">시니어 (50대+)</option>
-            <option value="관광객·외국인">관광객·외국인</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>예상 좌석 수</label>
-          <select id="seats">
-            <option value="소형 (10석 이하)">소형 (10석 이하)</option>
-            <option value="중형 (11~30석)" selected>중형 (11~30석)</option>
-            <option value="대형 (31석 이상)">대형 (31석 이상)</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>운영 방식</label>
-          <select id="op">
-            <option value="혼자 운영">혼자 운영</option>
-            <option value="파트너와 함께">파트너와 함께</option>
-            <option value="직원 고용 예정">직원 고용 예정</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>희망 지역</label>
-          <input type="text" id="region" placeholder="예: 부산대학교 앞, 홍대 입구...">
-        </div>
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="section-title">추가 정보 <small style="font-size:10px;text-transform:none;letter-spacing:0;color:var(--text3)">(선택)</small></div>
-      <div class="field">
-        <textarea id="extra" placeholder="예: 점심 장사 위주로 생각 중, 초밥 전문점 고려 중, 인근에 대형 경쟁 업체 있음..."></textarea>
-      </div>
-    </div>
-
-    <div style="display:flex;gap:10px;margin-top:16px;">
-      <button class="btn-analyze" onclick="goStep(0)" style="flex:1;background:var(--bg3);color:var(--text2);border:1px solid var(--border-bright);font-family:'Noto Sans KR',sans-serif;font-size:14px;font-weight:400;">← 이전</button>
-      <button class="btn-analyze" onclick="goStep(2)" style="flex:2;background:var(--bg3);color:var(--accent);border:1px solid rgba(200,169,110,0.4);font-family:'Noto Sans KR',sans-serif;font-size:14px;font-weight:500;">다음 단계 →</button>
-    </div>
-  </div>
-
-  <!-- PANEL 2 -->
-  <div class="panel" id="panel-2">
-    <div class="section-title">입력 내용 확인</div>
-    <div class="summary-grid">
-      <div class="sum-cell"><div class="sc-label">선택 업종</div><div class="sc-val" id="sum-genre">—</div></div>
-      <div class="sum-cell"><div class="sc-label">예산</div><div class="sc-val" id="sum-budget">—</div></div>
-      <div class="sum-cell"><div class="sc-label">희망 상권</div><div class="sc-val" id="sum-area">—</div></div>
-      <div class="sum-cell"><div class="sc-label">목표 고객</div><div class="sc-val" id="sum-target">—</div></div>
-      <div class="sum-cell"><div class="sc-label">지역</div><div class="sc-val" id="sum-region">—</div></div>
-      <div class="sum-cell"><div class="sc-label">운영 방식</div><div class="sc-val" id="sum-op">—</div></div>
-    </div>
-
-    <div style="display:flex;gap:10px;margin-top:8px;">
-      <button class="btn-analyze" onclick="goStep(1)" style="flex:1;background:var(--bg3);color:var(--text2);border:1px solid var(--border-bright);font-family:'Noto Sans KR',sans-serif;font-size:14px;font-weight:400;">← 이전</button>
-      <button class="btn-analyze" id="analyze-btn" onclick="runAnalysis()">
-        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
-        AI 종합 분석 시작
-      </button>
-    </div>
-  </div>
-
-  <!-- RESULT -->
-  <div id="result-area">
-    <div class="divider"></div>
-    <div id="result-inner"></div>
-    <button class="btn-reset" onclick="resetAll()">↺ 처음부터 다시 분석</button>
-  </div>
-
-  <footer>
-    AI 분석 결과는 참고용이며 실제 창업 결정 시 현장 조사와 전문가 상담을 병행하시길 권장합니다.<br>
-    Powered by Claude AI · 2026
-  </footer>
-
+  <div class="ak-status" id="ak-status"></div>
 </div>
-
+<div class="steps">
+  <div class="step-item active" id="tab-0" onclick="goStep(0)"><span>①</span>업종·예산</div>
+  <div class="step-item" id="tab-1" onclick="goStep(1)"><span>②</span>상권·운영</div>
+  <div class="step-item" id="tab-2" onclick="goStep(2)"><span>③</span>분석 시작</div>
+</div>
+<div class="panel active" id="panel-0">
+  <div class="section">
+    <div class="section-title">관심 업종 <small style="font-size:10px;text-transform:none;letter-spacing:0;color:var(--text3)">(복수 선택)</small></div>
+    <div class="chips" id="genre-chips">
+      <button class="chip" data-v="한식">한식</button><button class="chip" data-v="중식">중식</button><button class="chip" data-v="일식">일식</button><button class="chip" data-v="양식">양식</button><button class="chip" data-v="카페·디저트">카페·디저트</button><button class="chip" data-v="치킨·튀김">치킨·튀김</button><button class="chip" data-v="분식">분식</button><button class="chip" data-v="고기구이">고기구이</button><button class="chip" data-v="해산물">해산물</button><button class="chip" data-v="샐러드·건강식">샐러드·건강식</button><button class="chip" data-v="술집·주점">술집·주점</button><button class="chip" data-v="테이크아웃">테이크아웃</button>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">창업 예산</div>
+    <div class="slider-row"><input type="range" id="budget" min="1" max="10" step="1" value="5"><span class="slider-val" id="budget-out">5천만원</span></div>
+  </div>
+  <div class="section">
+    <div class="section-title">창업자 경험</div>
+    <div class="chips" id="exp-chips">
+      <button class="chip" data-v="업계 경험 없음">경험 없음</button><button class="chip" data-v="아르바이트·파트타임">파트타임 경험</button><button class="chip" data-v="직접 운영 경험 있음">직접 운영 경험</button>
+    </div>
+  </div>
+  <button class="btn btn-outline-gold" onclick="goStep(1)" style="margin-top:16px;">다음 단계 →</button>
+</div>
+<div class="panel" id="panel-1">
+  <div class="section">
+    <div class="section-title">희망 상권 유형 <small style="font-size:10px;text-transform:none;letter-spacing:0;color:var(--text3)">(복수 선택)</small></div>
+    <div class="chips" id="area-chips">
+      <button class="chip" data-v="역세권">역세권</button><button class="chip" data-v="대학가">대학가</button><button class="chip" data-v="오피스 밀집">오피스 밀집</button><button class="chip" data-v="주택가·골목">주택가·골목</button><button class="chip" data-v="쇼핑몰·복합시설">쇼핑몰</button><button class="chip" data-v="관광지">관광지</button><button class="chip" data-v="학원가">학원가</button><button class="chip" data-v="병원·의료 밀집">병원·의료</button>
+    </div>
+  </div>
+  <div class="section">
+    <div class="input-row">
+      <div class="field"><label>목표 고객층</label><select id="target"><option value="">선택하세요</option><option value="10~20대 학생">10~20대 학생</option><option value="직장인 (30~40대)">직장인 (30~40대)</option><option value="가족 단위">가족 단위</option><option value="시니어 (50대+)">시니어 (50대+)</option><option value="관광객·외국인">관광객·외국인</option></select></div>
+      <div class="field"><label>예상 좌석 수</label><select id="seats"><option value="소형 (10석 이하)">소형 (10석 이하)</option><option value="중형 (11~30석)" selected>중형 (11~30석)</option><option value="대형 (31석 이상)">대형 (31석 이상)</option></select></div>
+      <div class="field"><label>운영 방식</label><select id="op"><option value="혼자 운영">혼자 운영</option><option value="파트너와 함께">파트너와 함께</option><option value="직원 고용 예정">직원 고용 예정</option></select></div>
+      <div class="field"><label>희망 지역</label><input type="text" id="region" placeholder="예: 부산대학교 앞, 홍대 입구..."></div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">추가 정보 <small style="font-size:10px;text-transform:none;letter-spacing:0;color:var(--text3)">(선택)</small></div>
+    <div class="field"><textarea id="extra" placeholder="예: 점심 장사 위주, 초밥 전문점 고려 중..."></textarea></div>
+  </div>
+  <div style="display:flex;gap:10px;margin-top:16px;">
+    <button class="btn btn-ghost" onclick="goStep(0)" style="flex:1;">← 이전</button>
+    <button class="btn btn-outline-gold" onclick="goStep(2)" style="flex:2;">다음 단계 →</button>
+  </div>
+</div>
+<div class="panel" id="panel-2">
+  <div class="section-title">입력 내용 확인</div>
+  <div class="summary-grid">
+    <div class="sum-cell"><div class="sc-label">선택 업종</div><div class="sc-val" id="sum-genre">—</div></div>
+    <div class="sum-cell"><div class="sc-label">예산</div><div class="sc-val" id="sum-budget">—</div></div>
+    <div class="sum-cell"><div class="sc-label">희망 상권</div><div class="sc-val" id="sum-area">—</div></div>
+    <div class="sum-cell"><div class="sc-label">목표 고객</div><div class="sc-val" id="sum-target">—</div></div>
+    <div class="sum-cell"><div class="sc-label">지역</div><div class="sc-val" id="sum-region">—</div></div>
+    <div class="sum-cell"><div class="sc-label">운영 방식</div><div class="sc-val" id="sum-op">—</div></div>
+  </div>
+  <div style="display:flex;gap:10px;margin-top:8px;">
+    <button class="btn btn-ghost" onclick="goStep(1)" style="flex:1;">← 이전</button>
+    <button class="btn btn-gold" id="analyze-btn" onclick="runAnalysis()" style="flex:2;margin-top:0;">AI 종합 분석 시작</button>
+  </div>
+</div>
+<div id="result-area">
+  <div class="divider"></div>
+  <div id="result-inner"></div>
+  <button class="btn-reset" onclick="resetAll()">↺ 처음부터 다시 분석</button>
+</div>
+<footer>AI 분석 결과는 참고용이며 실제 창업 결정 시 현장 조사와 전문가 상담을 병행하시길 권장합니다.<br>Powered by Claude AI · 2026</footer>
+</div>
 <script>
-const BUDGETS = ['1천만원','2천만원','3천만원','4천만원','5천만원','6천만원','7천만원','8천만원','9천만원','1억원 이상'];
-
-// budget slider
-document.getElementById('budget').addEventListener('input', function() {
-  document.getElementById('budget-out').textContent = BUDGETS[this.value - 1];
-});
-
-// chip toggle — single select for exp, multi for others
-function initChips(id, single) {
-  document.querySelectorAll('#' + id + ' .chip').forEach(c => {
-    c.addEventListener('click', () => {
-      if (single) {
-        document.querySelectorAll('#' + id + ' .chip').forEach(x => x.classList.remove('on'));
-      }
-      c.classList.toggle('on');
-    });
-  });
+const BUDGETS=['1천만원','2천만원','3천만원','4천만원','5천만원','6천만원','7천만원','8천만원','9천만원','1억원 이상'];
+let savedKey=localStorage.getItem('anthropic_key')||'';
+window.addEventListener('DOMContentLoaded',()=>{if(savedKey){document.getElementById('api-key').value=savedKey;document.getElementById('ak-status').textContent='✓ 저장된 API 키가 있습니다';document.getElementById('ak-status').className='ak-status ok';}});
+function saveKey(){const k=document.getElementById('api-key').value.trim();if(!k.startsWith('sk-ant-')){document.getElementById('ak-status').textContent='올바른 형식이 아닙니다 (sk-ant-... 로 시작)';document.getElementById('ak-status').className='ak-status err';return;}savedKey=k;localStorage.setItem('anthropic_key',k);document.getElementById('ak-status').textContent='✓ API 키가 저장되었습니다';document.getElementById('ak-status').className='ak-status ok';}
+document.getElementById('budget').addEventListener('input',function(){document.getElementById('budget-out').textContent=BUDGETS[this.value-1];});
+function initChips(id,single){document.querySelectorAll('#'+id+' .chip').forEach(c=>{c.addEventListener('click',()=>{if(single)document.querySelectorAll('#'+id+' .chip').forEach(x=>x.classList.remove('on'));c.classList.toggle('on');});});}
+initChips('genre-chips',false);initChips('area-chips',false);initChips('exp-chips',true);
+function getChips(id){return Array.from(document.querySelectorAll('#'+id+' .chip.on')).map(c=>c.dataset.v).filter(Boolean);}
+function goStep(n){if(n===2)updateSummary();document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===n));document.querySelectorAll('.step-item').forEach((t,i)=>t.classList.toggle('active',i===n));window.scrollTo({top:0,behavior:'smooth'});}
+function updateSummary(){document.getElementById('sum-genre').textContent=getChips('genre-chips').join(', ')||'선택 안 함';document.getElementById('sum-budget').textContent=BUDGETS[document.getElementById('budget').value-1];document.getElementById('sum-area').textContent=getChips('area-chips').join(', ')||'선택 안 함';document.getElementById('sum-target').textContent=document.getElementById('target').value||'미지정';document.getElementById('sum-region').textContent=document.getElementById('region').value||'미지정';document.getElementById('sum-op').textContent=document.getElementById('op').value;}
+async function runAnalysis(){
+  const key=savedKey||document.getElementById('api-key').value.trim();
+  if(!key||!key.startsWith('sk-ant-')){alert('상단의 Anthropic API 키를 먼저 입력하고 저장해 주세요.\nconsole.anthropic.com/keys 에서 무료로 발급받을 수 있습니다.');return;}
+  const genres=getChips('genre-chips'),areas=getChips('area-chips'),exp=getChips('exp-chips')[0]||'미지정';
+  const budget=BUDGETS[document.getElementById('budget').value-1],target=document.getElementById('target').value||'미지정';
+  const seats=document.getElementById('seats').value,op=document.getElementById('op').value;
+  const region=document.getElementById('region').value||'미지정',extra=document.getElementById('extra').value.trim();
+  const prompt='당신은 대한민국 요식업 창업 전문 컨설턴트입니다.\n\n[창업 조건]\n관심 업종: '+(genres.join(', ')||'미선택')+'\n예산: '+budget+'\n경험: '+exp+'\n희망 상권: '+(areas.join(', ')||'미선택')+'\n희망 지역: '+region+'\n목표 고객: '+target+'\n좌석: '+seats+'\n운영: '+op+(extra?'\n추가: '+extra:'')+'\n\n아래 형식으로 분석해주세요:\n## 상권 분석\n## 추천 업종 TOP 3 (각 업종명/컨셉, 트렌드·경쟁도·예산적합성·상권궁합 각 10점, 종합점수, 강점3, 리스크2, 월매출/순이익/회수기간)\n## 핵심 리스크 2가지\n## 성공 전략 3가지\n\n수치와 사례 포함, 한국어로 작성.';
+  const ra=document.getElementById('result-area'),ri=document.getElementById('result-inner');
+  ra.classList.add('visible');ra.scrollIntoView({behavior:'smooth',block:'start'});
+  document.getElementById('analyze-btn').disabled=true;
+  ri.innerHTML='<div class="loading"><div class="spinner"></div><div><div class="loading-text">AI 분석 진행 중...</div><div class="loading-step" id="ls">상권 데이터 분석 중</div></div></div>';
+  const steps=['상권 데이터 분석 중','경쟁 업종 조회 중','수익성 시뮬레이션 중','리포트 작성 중'];
+  let si=0;const tmr=setInterval(()=>{si=(si+1)%4;const el=document.getElementById('ls');if(el)el.textContent=steps[si];},1800);
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-opus-4-5',max_tokens:2000,messages:[{role:'user',content:prompt}]})});
+    clearInterval(tmr);
+    if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error?.message||'API 오류 ('+res.status+')');}
+    const d=await res.json();const txt=d.content?.map(b=>b.text||'').join('')||'';
+    if(!txt)throw new Error('응답이 비어 있습니다.');
+    renderResult(txt);
+  }catch(e){clearInterval(tmr);ri.innerHTML='<div class="error-box"><strong>오류가 발생했습니다</strong><br><br>'+e.message+'<br><br><small>API 키가 올바른지 확인해 주세요.</small></div>';}
+  document.getElementById('analyze-btn').disabled=false;
 }
-initChips('genre-chips', false);
-initChips('area-chips', false);
-initChips('exp-chips', true);
-
-function getChips(id) {
-  return Array.from(document.querySelectorAll('#' + id + ' .chip.on')).map(c => c.dataset.v).filter(Boolean);
+function renderResult(text){
+  const secs=text.split(/\n## /).map((s,i)=>i===0?s:'## '+s);let html='';
+  secs.forEach(sec=>{if(!sec.trim())return;const hm=sec.match(/^## (.+)/);if(hm){html+='<h2>'+esc(hm[1])+'</h2>'+rb(sec.replace(/^## .+\n/,''));}else html+=rb(sec);});
+  document.getElementById('result-inner').innerHTML='<div class="result-content">'+html+'</div>';
 }
-
-// steps
-let currentStep = 0;
-function goStep(n) {
-  if (n === 2) updateSummary();
-  currentStep = n;
-  document.querySelectorAll('.panel').forEach((p, i) => p.classList.toggle('active', i === n));
-  document.querySelectorAll('.step-item').forEach((t, i) => t.classList.toggle('active', i === n));
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function updateSummary() {
-  const genres = getChips('genre-chips');
-  const areas = getChips('area-chips');
-  document.getElementById('sum-genre').textContent = genres.length ? genres.join(', ') : '선택 안 함';
-  document.getElementById('sum-budget').textContent = BUDGETS[document.getElementById('budget').value - 1];
-  document.getElementById('sum-area').textContent = areas.length ? areas.join(', ') : '선택 안 함';
-  document.getElementById('sum-target').textContent = document.getElementById('target').value || '미지정';
-  document.getElementById('sum-region').textContent = document.getElementById('region').value || '미지정';
-  document.getElementById('sum-op').textContent = document.getElementById('op').value;
-}
-
-async function runAnalysis() {
-  const genres = getChips('genre-chips');
-  const areas = getChips('area-chips');
-  const exp = getChips('exp-chips')[0] || '미지정';
-  const budget = BUDGETS[document.getElementById('budget').value - 1];
-  const target = document.getElementById('target').value || '미지정';
-  const seats = document.getElementById('seats').value;
-  const op = document.getElementById('op').value;
-  const region = document.getElementById('region').value || '미지정';
-  const extra = document.getElementById('extra').value.trim();
-
-  const prompt = `당신은 대한민국 요식업 창업 전문 컨설턴트입니다. 아래 조건을 바탕으로 심층 분석 리포트를 작성해주세요.
-
-[창업 조건]
-- 관심 업종: ${genres.length ? genres.join(', ') : '미선택'}
-- 예산: ${budget}
-- 창업 경험: ${exp}
-- 희망 상권: ${areas.length ? areas.join(', ') : '미선택'}
-- 희망 지역: ${region}
-- 목표 고객: ${target}
-- 좌석 규모: ${seats}
-- 운영 방식: ${op}
-${extra ? `- 추가 정보: ${extra}` : ''}
-
-아래 구성으로 구체적이고 실용적인 분석을 작성해주세요:
-
-## 상권 분석
-${region !== '미지정' ? `${region} 상권의 특성, 유동인구 패턴, 경쟁 현황을 분석해주세요.` : '선택한 상권 유형의 특성과 주의사항을 분석해주세요.'}
-
-## 추천 업종 TOP 3
-각 업종에 대해 다음을 포함해서 작성:
-- 업종명과 구체적 컨셉 (예: 라멘·돈카츠 전문점, 런치정식+저녁이자카야)
-- 트렌드·경쟁도·예산적합성·상권궁합 점수 (각 10점 만점, 숫자로 명시)
-- 종합 점수 (100점 만점)
-- 강점 3가지 / 리스크 2가지
-- 월 예상 매출, 순이익, 투자 회수 기간
-
-## 핵심 리스크 2가지
-이 조건에서 반드시 조심해야 할 리스크를 제목과 대응 방안과 함께 서술
-
-## 성공 전략 3가지
-구체적이고 즉시 실행 가능한 조언을 번호와 함께 서술
-
-분석은 구체적인 수치와 사례를 포함해서 실질적으로 도움이 되게 작성해주세요. 한국어로 작성.`;
-
-  // Show result area
-  const resultArea = document.getElementById('result-area');
-  const resultInner = document.getElementById('result-inner');
-  resultArea.classList.add('visible');
-  resultArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-  document.getElementById('analyze-btn').disabled = true;
-
-  resultInner.innerHTML = `
-    <div class="loading">
-      <div class="spinner"></div>
-      <div>
-        <div class="loading-text">AI 분석 진행 중...</div>
-        <div class="loading-step" id="loading-step">상권 데이터 분석 중</div>
-      </div>
-    </div>`;
-
-  const steps = ['상권 데이터 분석 중', '경쟁 업종 조회 중', '수익성 시뮬레이션 중', '리포트 작성 중'];
-  let stepIdx = 0;
-  const stepTimer = setInterval(() => {
-    stepIdx = (stepIdx + 1) % steps.length;
-    const el = document.getElementById('loading-step');
-    if (el) el.textContent = steps[stepIdx];
-  }, 1800);
-
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 2000,
-        messages: [{ role: 'user', content: prompt }]
-      })
-    });
-
-    clearInterval(stepTimer);
-
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.error?.message || `API 오류 (${res.status})`);
-    }
-
-    const data = await res.json();
-    const text = data.content?.map(b => b.text || '').join('') || '';
-
-    if (!text) throw new Error('응답이 비어 있습니다.');
-
-    renderResult(text);
-  } catch (e) {
-    clearInterval(stepTimer);
-    resultInner.innerHTML = `
-      <div class="error-box">
-        <strong>분석 중 오류가 발생했습니다</strong><br><br>
-        ${e.message}<br><br>
-        <small style="opacity:0.7">이 툴을 로컬 서버 없이 파일로 여셨다면, API 키 인증이 필요합니다. Claude.ai 내 아티팩트 환경에서 실행해주세요.</small>
-      </div>`;
-  }
-
-  document.getElementById('analyze-btn').disabled = false;
-}
-
-function renderResult(text) {
-  const resultInner = document.getElementById('result-inner');
-
-  // Parse sections
-  const sections = text.split(/\n## /).map((s, i) => i === 0 ? s : '## ' + s);
-
-  let html = '';
-
-  sections.forEach(sec => {
-    if (!sec.trim()) return;
-
-    // heading
-    const headMatch = sec.match(/^## (.+)/);
-    if (headMatch) {
-      html += `<h2>${escHtml(headMatch[1])}</h2>`;
-      const body = sec.replace(/^## .+\n/, '');
-      html += renderBody(body);
-    } else {
-      html += renderBody(sec);
-    }
-  });
-
-  resultInner.innerHTML = `<div class="result-content">${html}</div>`;
-
-  // animate bars
-  setTimeout(() => {
-    document.querySelectorAll('.bar-fill-el').forEach(el => {
-      const w = el.dataset.w;
-      if (w) el.style.width = w + '%';
-    });
-  }, 100);
-}
-
-function renderBody(text) {
-  let html = '';
-  const lines = text.split('\n');
-  let inList = false;
-
-  lines.forEach(line => {
-    const trimmed = line.trim();
-    if (!trimmed) {
-      if (inList) { html += '</ul>'; inList = false; }
-      return;
-    }
-
-    if (trimmed.startsWith('### ')) {
-      if (inList) { html += '</ul>'; inList = false; }
-      html += `<h3>${escHtml(trimmed.slice(4))}</h3>`;
-    } else if (trimmed.startsWith('- ') || trimmed.match(/^\d+\. /)) {
-      if (!inList) { html += '<ul>'; inList = true; }
-      const content = trimmed.replace(/^- /, '').replace(/^\d+\. /, '');
-      html += `<li>${formatInline(content)}</li>`;
-    } else {
-      if (inList) { html += '</ul>'; inList = false; }
-      html += `<p>${formatInline(trimmed)}</p>`;
-    }
-  });
-
-  if (inList) html += '</ul>';
-  return html;
-}
-
-function formatInline(text) {
-  return text
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*(.+?)\*/g, '<em>$1</em>')
-    .replace(/`(.+?)`/g, '<code style="background:rgba(255,255,255,0.07);padding:1px 5px;border-radius:2px;font-size:12px;">$1</code>');
-}
-
-function escHtml(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-
-function resetAll() {
-  document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
-  document.getElementById('budget').value = 5;
-  document.getElementById('budget-out').textContent = '5천만원';
-  document.getElementById('target').value = '';
-  document.getElementById('seats').value = '중형 (11~30석)';
-  document.getElementById('op').value = '혼자 운영';
-  document.getElementById('region').value = '';
-  document.getElementById('extra').value = '';
-  document.getElementById('result-area').classList.remove('visible');
-  goStep(0);
-}
+function rb(text){let html='',il=false;text.split('\n').forEach(line=>{const t=line.trim();if(!t){if(il){html+='</ul>';il=false;}return;}if(t.startsWith('### ')){if(il){html+='</ul>';il=false;}html+='<h3>'+esc(t.slice(4))+'</h3>';}else if(t.startsWith('- ')||t.match(/^\d+\. /)){if(!il){html+='<ul>';il=true;}html+='<li>'+fmt(t.replace(/^- /,'').replace(/^\d+\. /,''))+'</li>';}else{if(il){html+='</ul>';il=false;}html+='<p>'+fmt(t)+'</p>';}});if(il)html+='</ul>';return html;}
+function fmt(t){return t.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>');}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function resetAll(){document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));document.getElementById('budget').value=5;document.getElementById('budget-out').textContent='5천만원';['target','seats','op'].forEach(id=>{const el=document.getElementById(id);if(el)el.selectedIndex=id==='seats'?1:0;});document.getElementById('region').value='';document.getElementById('extra').value='';document.getElementById('result-area').classList.remove('visible');goStep(0);}
 </script>
 </body>
 </html>
